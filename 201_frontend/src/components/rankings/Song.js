@@ -1,0 +1,1 @@
+// song card with rating functionality
