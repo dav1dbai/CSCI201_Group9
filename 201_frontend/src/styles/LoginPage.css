@@ -1,0 +1,143 @@
+
+  .login-auth-page {
+    min-height: 100vh;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    padding: 40px 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;  
+  }
+  
+  .login-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 0px;
+    width: 100%;
+    height: 100vh;
+  }
+  
+  .login-title {
+    font-size: 75px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .login-powered-by {
+    color: #ffffff;
+    margin-bottom: 0px;
+  }
+  
+  .login-spotify-text {
+    color: #1DB954;
+    font-weight: 500;
+  }
+  
+  .login-form-container {
+    background: transparent;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: left;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 30px;
+  }
+  
+  .login-form-container h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-align: left;
+    color: white;
+  }
+  
+  .login-input-group {
+    margin-bottom: 20px;
+  }
+  
+  .login-input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: white;
+  }
+  
+  .login-input-group input {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid #ffffff40;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+  }
+  
+  .login-input-group input:focus {
+    outline: none;
+    border-color: #1DB954;
+  }
+  
+  .login-password-field {
+    position: relative;
+  }
+  
+  .login-hide-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .login-submit-button {
+    width: 100%;
+    background-color: #1DB954;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .login-submit-button:hover {
+    background-color: #1ed760;
+  }
+  
+  .login-forgot-password {
+    text-align: right;
+    margin-top: 15px;
+  }
+  
+  .login-forgot-password a {
+    color: #1DB954;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .login-signup-link {
+    text-align: center;
+    margin-top: 30px;
+    color: #b3b3b3;
+    text-align: left;
+  }
+  
+  .login-signup-link a {
+    color: #1DB954;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
