@@ -1,9 +1,16 @@
 
 import React, { useState } from 'react';
 import '../styles/LoginPage.css';
+import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate()
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    navigate('/home')
+  }
 
   return (
     <div className="login-auth-page">
@@ -16,7 +23,7 @@ const LoginPage = () => {
         <div className="login-form-container">
           <h2>Sign in</h2>
 
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="login-input-group">
                 <label>Username</label>
                 <input type=" text" />
