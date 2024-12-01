@@ -1,27 +1,36 @@
 
 import React, { useState } from 'react';
 import '../styles/RegisterPage.css';
+import { useNavigate } from 'react-router-dom'
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate()
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    navigate('/home')
+  }
 
   return (
     <div className="register-auth-page">
       <div className="register-header">
-        <div className="login-text">Already have an account? <a href="/login">Log in</a></div>
+        <div className="login-text">Already have an account? <a href="/">Log in</a></div>
       </div>
       
       <div className="register-content-container">
-        <h1 className="register-title">Rankify</h1>
-        <div className="register-powered-by">
-          powered by <span className="register-spotify-text">Spotify</span>
+        <div class="flex justify-center p-4">
+          <img
+            src="/images/logo.svg"
+            width={250} height={100}
+            alt="Rankify"
+          />
         </div>
-
         <div className="register-form-container">
           <h2>Create an account</h2>
           <p className="info-text">*Potentially add some information here*</p>
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="register-input-group">
               <label>Email</label>
               <input type="email" placeholder="" />
@@ -58,7 +67,7 @@ const RegisterPage = () => {
             <p className="register-terms-text">
               By creating an account, you agree to the{' '}
               <a href="/terms">Terms of use</a> and{' '}
-              <a href="/privacy">Privacy Policy</a>.
+              <a href="/terms">Privacy Policy</a>.
             </p>
           </form>
         </div>

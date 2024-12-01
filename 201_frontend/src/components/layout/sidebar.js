@@ -8,7 +8,7 @@ function Sidebar() {
 
     return (
 
-        <nav className="flex h-screen w-64 flex-col bg-[#50C878] justify-start p-2 gap-2">
+        <nav class="flex h-full w-64 flex-col bg-[#50C878] justify-start p-2 gap-2">
             <div class="flex justify-start pt-2">
                 <img
                     src="/images/Rankify logo.svg"

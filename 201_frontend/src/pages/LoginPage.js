@@ -15,11 +15,13 @@ const LoginPage = () => {
   return (
     <div className="login-auth-page">
       <div className="login-content-container">
-        <h1 className="login-title">Rankify</h1>
-        <div className="login-powered-by">
-          powered by <span className="login-spotify-text">Spotify</span>
+        <div class="flex justify-center pt-2">
+          <img
+            src="/images/logo.svg"
+            width={250} height={100}
+            alt="Rankify"
+          />
         </div>
-
         <div className="login-form-container">
           <h2>Sign in</h2>
 
@@ -47,9 +49,6 @@ const LoginPage = () => {
                 Sign in
               </button>
 
-              <div className="login-forgot-password">
-                <a href="/forgot-password">Forgot Password?</a>
-              </div>
             </form>
 
             <div className="login-signup-link">

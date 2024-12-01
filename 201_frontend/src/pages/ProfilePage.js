@@ -1,15 +1,11 @@
 import React from 'react';
-import { Star } from 'lucide-react';
 import Sidebar from '../components/layout/sidebar';
+import { ChevronDown } from 'lucide-react'
+import { RankedSongSm } from '../components/shared/RankedSongSm';
+import { RecentActivity } from '../components/shared/RecentActivity';
+import { useNavigate } from 'react-router-dom';
 
-
-const ProfileStats = ({ label, value }) => (
-  <div className="flex justify-between items-center text-sm py-2">
-    <span className="text-gray-400">{label}</span>
-    <span className="text-gray-300">{value}%</span>
-  </div>
-);
-
+/*
 const RecentActivity = ({ song, rating, timestamp }) => (
   <div className="flex items-start space-x-4 py-3">
     <div className="w-12 h-12 bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
@@ -36,9 +32,11 @@ const RecentActivity = ({ song, rating, timestamp }) => (
       </div>
     </div>
   </div>
-);
+);*/
 
 const ProfilePage = () => {
+  const navigate = useNavigate()
+  /*
   const stats = [
     { label: 'Pop', value: 83.5 },
     { label: 'Rock', value: 76.2 },
@@ -46,57 +44,76 @@ const ProfilePage = () => {
     { label: 'Jazz', value: 71.3 },
     { label: 'Electronic', value: 88.5 },
     { label: 'Hip Hop', value: 79.4 }
-  ];
+  ];*/
+
+  const rankings = [
+    { id: 1, title: 'Last Christmas', artist: 'Wham!', rating: 4 },
+    { id: 2, title: 'Winter Wonderland', artist: 'Michael Bublé', rating: 5 },
+    { id: 3, title: 'Jingle Bell Rock', artist: 'Bobby Helms', rating: 3 },
+    { id: 4, title: 'Santa Baby', artist: 'Eartha Kith', rating: 4 },
+    { id: 5, title: 'White Christmas', artist: 'Artist' },
+    { id: 6, title: 'Deck the Hall', artist: 'Artist' }
+  ]
 
   const recentActivity = [
-    { song: 'Last Christmas', rating: 4, timestamp: '2h ago' },
-    { song: 'Winter Wonderland', rating: 5, timestamp: '4h ago' },
-    { song: 'Jingle Bell Rock', rating: 3, timestamp: '1d ago' },
-    { song: 'Santa Baby', rating: 4, timestamp: '2d ago' }
+    { id: 1, song: 'Last Christmas', rating: 4, timestamp: '2h ago' },
+    { id: 2, song: 'Winter Wonderland', rating: 5, timestamp: '4h ago' },
+    { id: 3, song: 'Jingle Bell Rock', rating: 3, timestamp: '1d ago' },
+    { id: 4, song: 'Santa Baby', rating: 4, timestamp: '2d ago' }
   ];
 
+  const handleLogout = () => {
+    // Here you would typically clear any authentication tokens or user data
+    // For this example, we'll just redirect to the login page
+    navigate('/')
+  }
+
   return (
-    <div className="flex min-h-screen bg-gray-900">
+    <div className="flex min-h-screen bg-[#393939]">
     <Sidebar />
-      <div className=" flex-1 p-8">
-        <div className="flex items-center mb-8">
-          <div className="w-24 h-24 bg-gray-700 rounded-full overflow-hidden">
-            <img
-              src="/api/placeholder/96/96"
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
+    <div className="flex-1 p-8">
+        {/* Header with logout button */}
+        <div className="flex justify-end">
+          <button onClick={handleLogout} className="px-4 py-2 bg-green-500 text-white rounded-full transition-colors">
+            Logout
+          </button>
+        </div>
+
+        {/* Profile section */}
+        <div className="flex items-center gap-6 pl-8 mb-12">
+          <div className="w-44 h-44 rounded-full bg-gray-600 overflow-hidden">
+            <img src="/images/Blank User.svg" alt="Profile" className="w-full h-full object-cover" />
           </div>
-          <div className="ml-6">
-            <h1 className="text-white text-2xl font-bold">Ilovemusic</h1>
-            <p className="text-gray-400">@username</p>
+          <div>
+            <div className="text-sm text-white/60 mb-1">Me</div>
+            <h1 className="text-4xl text-white font-bold mb-2">Ilovemusic</h1>
+            <div className="text-white/60">16 Rankings • 7 Friends</div>
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-gray-800 rounded-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Rankings</h2>
-            <div className="space-y-1">
-              {stats.map((stat) => (
-                <ProfileStats
-                  key={stat.label}
-                  label={stat.label}
-                  value={stat.value}
-                />
+
+        {/* Main content grid */}
+        <div className="grid grid-cols-2 grid-flow-col gap-10 ml-6">
+          {/* Recent Activity */}
+          <div className="bg-neutral-200/10 rounded-2xl p-6">
+            <h2 className="text-3xl text-white font-bold mb-4">Recent Activity</h2>
+            <div className="space-y-8">
+              {recentActivity.map((activity) => (
+                <RecentActivity key={activity.id} activity={activity} />
               ))}
             </div>
           </div>
-          <div className="bg-gray-800 rounded-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Recent Activity</h2>
-            <div className="divide-y divide-gray-700">
-              {recentActivity.map((activity, index) => (
-                <RecentActivity
-                  key={index}
-                  song={activity.song}
-                  rating={activity.rating}
-                  timestamp={activity.timestamp}
-                />
+
+          {/* Rankings */}
+          <div className="bg-neutral-200/10 rounded-2xl p-6 mr-6">
+            <h2 className="text-3xl text-white font-bold mb-4">Rankings</h2>
+            <div className="grid grid-cols-2 grid-cols-3 gap-4">
+              {rankings.map((song, index) => (
+                <RankedSongSm key={index} {...song} />
               ))}
             </div>
+            <button className="w-full mt-4 p-2 text-white/60 hover:text-white transition-colors">
+              <ChevronDown className="w-6 h-6 mx-auto" />
+            </button>
           </div>
         </div>
       </div>
