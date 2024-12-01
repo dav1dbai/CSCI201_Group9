@@ -10,7 +10,7 @@ const demoData = {
       {title: 'Jingle Bell Rock', artist: 'Bobby Helms', rating: 3 },
       {title: 'Santa Baby', artist: 'Eartha Kith', rating: 4 }
     ],
-    categories: [
+    recs: [
       { id: 1, title: 'Last Christmas', artist: 'Wham!' },
       { id: 2, title: 'Winter Wonderland', artist: 'Michael Bublé' },
       { id: 3, title: 'Jingle Bell Rock', artist: 'Bobby Helms' },
@@ -54,8 +54,8 @@ const demoData = {
           <section className="space-y-6">
             <h2 className="text-2xl font-bold text-white mx-4">Recommended Songs</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mx-4">
-              {demoData.categories.map((song) => (
-              <Song key={song.id} song={song} />
+              {demoData.recs.map((song, i) => (
+              <Song key={song.id} title={song.title} artist={song.artist} image={"/images/Blank Album Cover.svg"}/>
               ))}
             </div>
           </section>

@@ -55,7 +55,7 @@ export default function User() {
             <div className="text-white/60">16 Rankings • 7 Friends</div>
             <button 
                 onClick={() => setIsFriend(!isFriend)}
-                className={`flex items-center my-2 px-3 py-1 text-white font-medium text-sm rounded-full ${
+                className={`flex items-center my-3 px-3 py-1 text-white font-medium text-sm rounded-full ${
                 isFriend 
                     ? 'bg-[#50C878]/90 hover:bg-[#50C878]/60' 
                     : 'outline outline-1 hover:bg-white/20 hover:outline-1'
