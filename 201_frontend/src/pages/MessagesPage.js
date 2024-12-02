@@ -76,12 +76,12 @@ const MessagesPage = () => {
       {/* Chat section */}
       <div className="flex flex-1 flex-col px-6 py-4">
         {/* Top bar with friend name, icons, and separator */}
-        <div className="flex justify-between items-center bg-[#2C2C2C] p-4 rounded-t-lg">
+        <div className="flex justify-between items-center bg-black/20 px-3 py-2 rounded-t-lg">
           <div className="flex items-center gap-3">
             <User className="text-white w-6 h-6" /> {/* Friend icon */}
-            <h3 className="text-white text-lg font-bold">{selectedFriend}</h3>
+            <h3 className="text-white text-lg font-bold flex mt-2">{selectedFriend}</h3>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex justify-center items-center gap-4">
             <Bell className="text-white w-6 h-6 cursor-pointer hover:text-[#4CAF50]" /> {/* Notifications */}
             <Settings className="text-white w-6 h-6 cursor-pointer hover:text-[#4CAF50]" /> {/* Settings */}
             <MoreHorizontal className="text-white w-6 h-6 cursor-pointer hover:text-[#4CAF50]" /> {/* Three dots */}
@@ -89,7 +89,7 @@ const MessagesPage = () => {
         </div>
 
         {/* Messages container */}
-        <div className="flex-1 bg-black rounded-b-lg p-4 overflow-y-scroll">
+        <div className="flex-1 bg-white/10 rounded-b-lg p-4 overflow-y-scroll">
           {messages.length > 0 ? (
             messages.map((msg, index) => (
               <div key={index} className="mb-4">
@@ -113,15 +113,15 @@ const MessagesPage = () => {
         </div>
 
         {/* Input area */}
-        <div className="mt-4 flex items-center gap-2 bg-[#2C2C2C] rounded-lg p-2">
+        <div className="mt-3 flex items-center gap-2 rounded-full p-2">
           {/* Emoji Picker */}
-          <Smile className="text-white w-6 h-6 cursor-pointer hover:text-[#4CAF50]" title="Add Emoji" />
+          <Smile className="ml-2 text-white w-6 h-6 cursor-pointer hover:text-[#4CAF50]" title="Add Emoji" />
           
           {/* Attach Files */}
           <Paperclip className="text-white w-6 h-6 cursor-pointer hover:text-[#4CAF50]" title="Attach File" />
 
           {/* Text editing symbol */}
-          <Edit className="text-white w-6 h-6 cursor-pointer hover:text-[#4CAF50]" title="Text Formatting" />
+          <Edit className="text-white w-6 h-6 cursor-pointer hover:text-[#4CAF50] mr-2" title="Text Formatting" />
 
           {/* Message input */}
           <input
@@ -129,7 +129,7 @@ const MessagesPage = () => {
             value={messageInput}
             onChange={(e) => setMessageInput(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 p-2 rounded-md bg-[#393939] text-white placeholder-gray-400"
+            className="flex-1 p-2 rounded-full bg-white/20 text-white ps-4 placeholder-white/70"
           />
 
           {/* Microphone */}
@@ -137,12 +137,12 @@ const MessagesPage = () => {
         </div>
 
         {/* Quick replies */}
-        <div className="mt-2 flex gap-2">
+        <div className="mt-3 flex gap-2">
           {quickReplies.map((reply, index) => (
             <button
               key={index}
               onClick={() => handleQuickReply(reply)}
-              className="bg-[#4CAF50] text-white p-2 rounded-md"
+              className="bg-[#50C878]/90 text-sm font-medium ps-3 pe-3 leading-5 text-white p-2 rounded-full"
             >
               {reply}
             </button>
@@ -151,22 +151,22 @@ const MessagesPage = () => {
       </div>
 
       {/* Friends list on the right */}
-      <div className="w-[300px] bg-[#4CAF50] p-4 flex flex-col items-center">
-        <h3 className="text-white font-bold text-lg mb-4">Start Chatting</h3>
-        <ul className="flex flex-col gap-2 items-center w-full">
+      <div className="w-[300px] bg-black/20 p-4 flex flex-col place-items-start">
+        <h3 className="text-white font-bold text-lg ml-3 mb-2 px-0 w-full">Start Chatting</h3>
+        <div className="flex flex-col gap-2 place-items-start w-full ml-2 px-0">
           {friends.map((friend, index) => (
-            <li
+            <div
               key={index}
               onClick={() => handleSelectFriend(friend)}
-              className={`w-3/4 p-2 text-center text-white cursor-pointer rounded-md ${
-                selectedFriend === friend ? "bg-[#BAECCA]" : "hover:bg-[#2E7D32]"
+              className={`w-full p-2 text-left ps-4 text-white font-semibold cursor-pointer rounded-full ${
+                selectedFriend === friend ? "bg-[#50C878]/90" : "hover:bg-[#50C878]/50"
               }`}
             >
               {friend}
-            </li>
+            </div>
           ))}
-        </ul>
-        <button className="bg-white text-[#4CAF50] p-2 rounded-md mt-6 w-3/4">
+        </div>
+        <button className="bg-white text-black/90 p-2 ml-2 rounded-full mt-6 w-60">
           Create Chat
         </button>
       </div>
