@@ -4,6 +4,8 @@ import { ChevronDown } from 'lucide-react'
 import { RankedSongSm } from '../components/shared/RankedSongSm';
 import { RecentActivity } from '../components/shared/RecentActivity';
 import { useNavigate } from 'react-router-dom';
+import { logout, getCurrentUser } from '../utils/auth';
+import { useEffect, useState } from 'react';
 
 /*
 const RecentActivity = ({ song, rating, timestamp }) => (
@@ -62,11 +64,25 @@ const ProfilePage = () => {
     { id: 4, song: 'Santa Baby', rating: 4, timestamp: '2d ago' }
   ];
 
+
+  const [user, setUser] = useState({
+    username: 'loading...',
+    email: 'loading...',
+    id: 'loading...'
+  });
   const handleLogout = () => {
-    // Here you would typically clear any authentication tokens or user data
-    // For this example, we'll just redirect to the login page
-    navigate('/')
-  }
+    logout();
+    navigate('/');
+  };
+
+  useEffect(() => {
+    async function fetchUser() {
+      const user = await getCurrentUser();
+      setUser(user);
+      console.log('Current user in ProfilePage:', user);
+    }
+    fetchUser();
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-[#393939]">
@@ -86,7 +102,7 @@ const ProfilePage = () => {
           </div>
           <div>
             <div className="text-sm text-white/60 mb-1">Me</div>
-            <h1 className="text-4xl text-white font-bold mb-2">Ilovemusic</h1>
+            <h1 className="text-4xl text-white font-bold mb-2">{user.username}</h1>
             <div className="text-white/60">16 Rankings • 7 Friends</div>
           </div>
         </div>

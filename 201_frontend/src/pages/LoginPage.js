@@ -1,16 +1,24 @@
-
 import React, { useState } from 'react';
 import '../styles/LoginPage.css';
 import { useNavigate } from 'react-router-dom'
+import { loginUser } from '../utils/auth';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate()
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    navigate('/home')
-  }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await loginUser(username, password);
+      navigate('/home');
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return (
     <div className="login-auth-page">
@@ -28,13 +36,21 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit}>
               <div className="login-input-group">
                 <label>Username</label>
-                <input type=" text" />
+                <input 
+                  type="text" 
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </div>
 
               <div className="login-input-group">
                 <label>Password</label>
                 <div className="login-password-field">
-                  <input type={showPassword ? "text" : "password"} />
+                  <input 
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                   <button 
                     type="button" 
                     className="login-hide-button"

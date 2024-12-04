@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export function Song({ title, artist, image }) {
+export function Song({ title, artist, image, id }) {
     return (
-        <Link to={`/song/${title}`} className="block text-black no-underline">
+        <Link to={`/song/${id}`} className="block text-black no-underline">
           <div className="space-y-2 rounded-lg hover:bg-black/10 transition">
           <div
             className={`aspect-square rounded-lg bg-gradient-to-b overflow-hidden`}

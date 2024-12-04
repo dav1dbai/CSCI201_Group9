@@ -101,7 +101,7 @@ export default function SearchPage() {
               console.log(track.artists[0].name);
               console.log(track.album.images[0]);
               return (
-                <Song key={i} title={track.name} artist={track.artists[0].name} image={track.album.images[0].url}/>
+                <Song key={i} id={track.id} title={track.name} artist={track.artists[0].name} image={track.album.images[0].url}/>
               )
             })} 
             {/*songs.map((song) => (

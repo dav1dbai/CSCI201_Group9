@@ -1,9 +1,13 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Star, X, Play } from 'lucide-react'
 import Sidebar from '../components/layout/sidebar'
+import { getTrackById } from '../utils/spotify'
+import { submitReview, getReviewsByTrack, validateReview } from '../utils/reviews'
 
 export default function SongPage() {
+  const { id } = useParams();
+  //console.log(id);
   const [showRatingModal, setShowRatingModal] = useState(false)
   const [rating, setRating] = useState(0)
   const [review, setReview] = useState('')
@@ -21,14 +25,41 @@ export default function SongPage() {
     { user: 'Marco', rating: '5/5', date: '3 days ago' },
   ]
 
-  const song = {
-    id: 1,
-    songtitle: 'Title',
-    artist: 'Artist',
-    album: 'Album',
-    coverArt: '/images/Blank Album Cover.svg',
-    genre: 'genre',
-    overallRating: '4.7/5'
+  const [song, setSong] = useState({});
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function fetchData() {
+      const song = await getTrackById(id);
+      setSong({
+        id: song.id,
+        songtitle: song.name,
+        artist: song.artists.length > 0 ? song.artists[0].name : '',
+        album: song.album.name,
+        coverArt: song.album.images[0]?.url || '',
+        previewUrl: song.preview_url,
+      });
+    }
+    fetchData();
+  }, []);
+
+  const handleSubmitReview = async () => {
+    console.log("submitting review");
+    const userId = localStorage.getItem('userId');
+    const { isValid, errors } = await validateReview(userId, song.id, rating, review);
+    console.log("isValid: ", isValid);
+    console.log("errors: ", errors);
+    if (!isValid) {
+      setError(errors);
+      return;
+    }
+    const res = await submitReview(userId, song.id, rating, review);
+    console.log("res: ", res);
+    if (res.error) {
+      setError(res.error);
+      return;
+    }
+    setShowRatingModal(false);
   }
 
   return (
@@ -41,15 +72,15 @@ export default function SongPage() {
         <div className="flex items-center gap-6 mb-8 ml-16">
           <div className="w-44 h-44 bg-purple-500 rounded-lg flex-shrink-0" >
             <img
-              src="/images/Blank Album Cover.svg"
+              src={song.coverArt}
               alt=""
               className="w-full h-full object-cover"
             />
           </div>
           <div>
             <h1 className="text-5xl text-white font-bold mb-3">{song.songtitle}</h1>
-            <div className="text-sm text-white/60 mt-2 mb-2">Genre: {song.genre}</div>
-            <div className="font-semibold text-white">{song.artist} • Overall: {song.overallRating}</div>
+            {/*<div className="text-sm text-white/60 mt-2 mb-2">Genre: {song.genre}</div>*/}
+            <div className="font-semibold text-white">{song.artist}</div>
           </div>
         </div>
         <div className="flex items-center gap-4 ml-16 mt-12 mb-8">
@@ -96,7 +127,7 @@ export default function SongPage() {
                 <div className="bg-black/20 rounded-2xl p-4 space-y-4">
                   <div className="aspect-square bg-zinc-700 rounded-2xl overflow-hidden">
                     <img
-                      src="/images/Blank Album Cover.svg"
+                      src={song.coverArt}
                       alt=""
                       className="w-full h-full object-cover"
                     />
@@ -135,10 +166,10 @@ export default function SongPage() {
                       className="w-full h-40 bg-white/30 rounded-lg p-3 placeholder:text-white text-white mb-3"
                       rows={4}
                     />
+                    {error && <div className="text-red-500">{error}</div>}
                     <button
                       onClick={() => {
-                        // Handle rating submission
-                        setShowRatingModal(false)
+                        handleSubmitReview();
                       }}
                       className="w-full bg-[#50C878] text-white rounded-lg py-2 hover:bg-[#50C878]/60 transition"
                     >
