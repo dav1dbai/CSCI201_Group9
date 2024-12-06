@@ -1,5 +1,5 @@
 // Helper functions for making API calls to the review servlet
-
+const API_BASE_URL = 'http://localhost:8080/FPP_9/'
 /**
  * Submit a new review
  * @param {string} userId - The user's ID
@@ -9,19 +9,19 @@
  * @returns {Promise} Response from the server
  */
 export const submitReview = async (userId, songId, stars, description) => {
-  const response = await fetch('/review/submit', {
+  const response = await fetch(`${API_BASE_URL}/review/submit`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/x-www-form-urlencoded'
     },
-    body: JSON.stringify({
+    body: new URLSearchParams({
       user_id: userId,
       song_id: songId, 
       stars,
       description
     })
   });
-  return response.json();
+  return response;
 };
 
 /**
@@ -30,7 +30,7 @@ export const submitReview = async (userId, songId, stars, description) => {
  * @returns {Promise} Array of review objects
  */
 export const getReviewsByUser = async (userId) => {
-  const response = await fetch(`/review/user?user_id=${userId}`);
+  const response = await fetch(`${API_BASE_URL}/review/user?user_id=${userId}`);
   return response.json();
 };
 
@@ -40,7 +40,7 @@ export const getReviewsByUser = async (userId) => {
  * @returns {Promise} Array of review objects
  */
 export const getReviewsByTrack = async (trackId) => {
-  const response = await fetch(`/review/track?song_id=${trackId}`);
+  const response = await fetch(`${API_BASE_URL}/review/track?song_id=${trackId}`);
   return response.json();
 };
 

@@ -4,6 +4,7 @@ import { ArrowLeft, Star, X, Play } from 'lucide-react'
 import Sidebar from '../components/layout/sidebar'
 import { getTrackById } from '../utils/spotify'
 import { submitReview, getReviewsByTrack, validateReview } from '../utils/reviews'
+import { getCurrentUser, getAllUsers } from '../utils/auth'
 
 export default function SongPage() {
   const { id } = useParams();
@@ -11,41 +12,57 @@ export default function SongPage() {
   const [showRatingModal, setShowRatingModal] = useState(false)
   const [rating, setRating] = useState(0)
   const [review, setReview] = useState('')
-
-  const recentRatings = [
-    { user: 'Toayo', rating: '4/5', date: 'yesterday' },
-    { user: 'Emmanuela', rating: '2.5/5', date: '2 days ago' },
-    { user: 'David', rating: '1/5', date: '3 days ago' },
-    { user: 'Malia', rating: '2/5', date: '3 days ago' },
-    { user: 'Eric', rating: '4/5', date: '3 days ago' },
-    { user: 'Vitor', rating: '3/5', date: '3 days ago' },
-    { user: 'Sanya', rating: '2/5', date: '3 days ago' },
-    { user: 'Alex', rating: '5/5', date: '3 days ago' },
-    { user: 'Chengxi', rating: '3/5', date: '3 days ago' },
-    { user: 'Marco', rating: '5/5', date: '3 days ago' },
-  ]
+  const [userId, setUserId] = useState('');
+  const [recentRatings, setRecentRatings] = useState([]);
 
   const [song, setSong] = useState({});
   const [error, setError] = useState('');
 
   useEffect(() => {
     async function fetchData() {
-      const song = await getTrackById(id);
-      setSong({
-        id: song.id,
-        songtitle: song.name,
-        artist: song.artists.length > 0 ? song.artists[0].name : '',
-        album: song.album.name,
-        coverArt: song.album.images[0]?.url || '',
-        previewUrl: song.preview_url,
-      });
+      try {
+        // Get song data
+        const song = await getTrackById(id);
+        setSong({
+          id: song.id,
+          songtitle: song.name,
+          artist: song.artists.length > 0 ? song.artists[0].name : '',
+          album: song.album.name,
+          coverArt: song.album.images[0]?.url || '',
+          previewUrl: song.preview_url,
+        });
+
+        // Get current user
+        setUserId(getCurrentUser().id);
+
+        // Get reviews and users data
+        const [reviewsData, usersData] = await Promise.all([
+          getReviewsByTrack(song.id),
+          getAllUsers()
+        ]);
+
+        // Map usernames to reviews
+        const reviewsWithUsernames = reviewsData.map(rating => ({
+          ...rating,
+          name: usersData.users.find(user => user.id === rating.user_id)?.username || 'Unknown User'
+        }));
+
+        setRecentRatings(reviewsWithUsernames);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Failed to load data');
+      }
     }
+    
     fetchData();
   }, []);
 
   const handleSubmitReview = async () => {
     console.log("submitting review");
-    const userId = localStorage.getItem('userId');
+    console.log('userId: ', userId);
+    console.log('song.id: ', song.id);
+    console.log('stars: ', rating);
+    console.log('review: ', review);
     const { isValid, errors } = await validateReview(userId, song.id, rating, review);
     console.log("isValid: ", isValid);
     console.log("errors: ", errors);
@@ -104,20 +121,24 @@ export default function SongPage() {
           </div>
         </div>
 
-        <div className="ml-2">
-          {recentRatings.map((rating, index) => (
-            <div key={index} className="grid grid-cols-12 items-center justify-between ml-16 pb-3 rounded-lg">
+        {recentRatings.length > 0 ? (
+          <div className="ml-2">
+            {recentRatings.map((rating, index) => (
+              <div key={index} className="grid grid-cols-12 items-center justify-between ml-16 pb-3 rounded-lg">
               <div className="col-span-4 flex items-center gap-4">
                 <div className="w-10 h-10 bg-gray-700 rounded-full" >
                   <img src="/images/Blank User.svg" alt="Profile" className="w-full h-full object-cover" />
                 </div>
-                <div className="text-white font-medium">{rating.user}</div>
+                <div className="text-white font-medium">{rating.name}</div>
               </div>
-              <div className="ml-12 text-md text-white/60">{rating.rating}</div>
-              <div className="col-span-4 ml-32 align-end text-md text-white/60">{rating.date}</div>
+              <div className="ml-12 text-md text-white/60">{rating.stars}</div>
+              <div className="col-span-4 ml-32 align-end text-md text-white/60">{rating.created_at.split('T')[0]}</div>
             </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="ml-2 text-white/60 text-lg text-center">No ratings yet!</div>
+        )}
 
         {showRatingModal && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center">

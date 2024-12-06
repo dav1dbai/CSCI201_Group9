@@ -47,16 +47,32 @@ export const searchTracks = async (query, limit = 20) => {
 
 // Get several tracks by IDs
 export const getTracksByIds = async (trackIds) => {
-  const token = await getAccessToken();
-  const ids = trackIds.join(',');
-  const response = await fetch(
-    `https://api.spotify.com/v1/tracks?ids=${ids}?market=US`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+  try {
+    const token = await getAccessToken();
+    // Filter out any malformed IDs and join with commas
+    const validIds = trackIds.filter(id => id && id.length > 0).join(',');
+    
+    if (!validIds) {
+      return { tracks: [] };
     }
-  );
-  return await response.json();
+
+    const response = await fetch(
+      `https://api.spotify.com/v1/tracks?ids=${validIds}&market=US`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Spotify API Error: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching tracks:', error);
+    return { tracks: [] };
+  }
 };
 
 // Get artist by ID

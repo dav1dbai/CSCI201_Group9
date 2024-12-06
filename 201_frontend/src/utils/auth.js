@@ -77,3 +77,33 @@ export const getCurrentUser = () => {
   console.log('Current user from localStorage:', user);
   return user ? JSON.parse(user)[0] : null;
 };
+
+export const getAllUsers = async () => {
+  console.log('Fetching all users');
+  try {
+    const response = await fetch(`${API_BASE_URL}/getAllUsers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }
+    });
+
+    console.log('GetAllUsers response status:', response.status);
+    const data = await response.json();
+    console.log('GetAllUsers response data:', data);
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to fetch user');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('GetAllUsers error:', error);
+    throw new Error(error.message || 'Failed to fetch users');
+  }
+};
+
+export const isCurrentUser = (userId) => {
+  const currentUser = getCurrentUser();
+  return currentUser ? currentUser.id === userId : false;
+};

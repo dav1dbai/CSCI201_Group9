@@ -23,15 +23,14 @@ public class AuthServlet extends HttpServlet {
         response.setHeader("Access-Control-Max-Age", "86400");
         
         String pathInfo = request.getPathInfo();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
         try {
             String result;
             if ("/login".equals(pathInfo)) {
-                result = login(username, password);
+                result = login(request.getParameter("username"), request.getParameter("password"));
             } else if ("/signup".equals(pathInfo)) {
-                result = signup(username, password);
+                result = signup(request.getParameter("username"), request.getParameter("password"));
+            } else if ("/getAllUsers".equals(pathInfo)) {
+                result = getAllUsers();
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid endpoint");
                 return;
@@ -108,6 +107,26 @@ public class AuthServlet extends HttpServlet {
             return "{\"success\": true, \"message\": \"User created successfully\", \"user\": " + createResponse.body() + "}";
         } else {
             throw new IOException("Error creating user: " + createResponse.body());
+        }
+    }
+
+    private String getAllUsers() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(SUPABASE_URL + "/rest/v1/users"))
+                .header("apikey", SUPABASE_API_KEY)
+                .header("Authorization", "Bearer " + SUPABASE_API_KEY)
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        
+        if (response.statusCode() == 200) {
+            return "{\"success\": true, \"users\": " + response.body() + "}";
+        } else {
+            throw new IOException("Error retrieving users: " + response.body());
         }
     }
 }
