@@ -8,7 +8,6 @@ import { getCurrentUser, getAllUsers } from '../utils/auth'
 
 export default function SongPage() {
   const { id } = useParams();
-  //console.log(id);
   const [showRatingModal, setShowRatingModal] = useState(false)
   const [rating, setRating] = useState(0)
   const [review, setReview] = useState('')
@@ -21,7 +20,7 @@ export default function SongPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Get song data
+
         const song = await getTrackById(id);
         setSong({
           id: song.id,
@@ -32,16 +31,13 @@ export default function SongPage() {
           previewUrl: song.preview_url,
         });
 
-        // Get current user
         setUserId(getCurrentUser().id);
 
-        // Get reviews and users data
         const [reviewsData, usersData] = await Promise.all([
           getReviewsByTrack(song.id),
           getAllUsers()
         ]);
 
-        // Map usernames to reviews
         const reviewsWithUsernames = reviewsData.map(rating => ({
           ...rating,
           name: usersData.users.find(user => user.id === rating.user_id)?.username || 'Unknown User'
@@ -96,7 +92,6 @@ export default function SongPage() {
           </div>
           <div>
             <h1 className="text-5xl text-white font-bold mb-3">{song.songtitle}</h1>
-            {/*<div className="text-sm text-white/60 mt-2 mb-2">Genre: {song.genre}</div>*/}
             <div className="font-semibold text-white">{song.artist}</div>
           </div>
         </div>
@@ -143,7 +138,7 @@ export default function SongPage() {
         {showRatingModal && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
             <div className="grid grid-cols-2  bg-[#585858] rounded-lg w-fit max-w-4xl">
-              {/*song card*/}
+
               <div className="flex ml-16 mr-2 my-12">
                 <div className="bg-black/20 rounded-2xl p-4 space-y-4">
                   <div className="aspect-square bg-zinc-700 rounded-2xl overflow-hidden">

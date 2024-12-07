@@ -4,21 +4,6 @@ import { RankedSong } from '../components/shared/RankedSong';
 import { Song } from '../components/shared/Song';
 import { searchTracks } from '../utils/spotify';
 import { useEffect, useState } from 'react';
-  /*
-  const SongCard = ({ title, artist, rating }) => (
-    <div className="bg-gray-800 p-4 rounded-lg">
-      <div className="w-full h-48 bg-gray-700 rounded-lg mb-4">
-        <img
-          src="/api/placeholder/200/200"
-          alt="Album art"
-          className="w-full h-full object-cover rounded-lg"
-        />
-      </div>
-      <h3 className="text-white font-medium mb-1">{title}</h3>
-      <p className="text-gray-400 text-sm mb-2">{artist}</p>
-      <StarRating rating={rating} />
-    </div>
-  );*/
   const HomePage = () => {
 
     const demoData = {

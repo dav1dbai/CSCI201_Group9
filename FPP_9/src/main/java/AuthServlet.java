@@ -74,8 +74,6 @@ public class AuthServlet extends HttpServlet {
 
     private String signup(String username, String password) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
-        
-        // First check if username already exists
         HttpRequest checkRequest = HttpRequest.newBuilder()
                 .uri(URI.create(SUPABASE_URL + "/rest/v1/users?username=eq." + username))
                 .header("apikey", SUPABASE_API_KEY)

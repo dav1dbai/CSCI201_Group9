@@ -3,7 +3,6 @@ const CLIENT_SECRET = '744a4ef0ff964402a3a70b98cf9fadbe';
 
 let accessToken = null;
 
-// Get access token using client credentials flow
 const getAccessToken = async () => {
   if (accessToken) return accessToken;
 
@@ -21,7 +20,6 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
-// Get track by ID
 export const getTrackById = async (trackId) => {
   const token = await getAccessToken();
   const response = await fetch(`https://api.spotify.com/v1/tracks/${trackId}?market=US`, {
@@ -32,7 +30,6 @@ export const getTrackById = async (trackId) => {
   return await response.json();
 };
 
-// Search tracks
 export const searchTracks = async (query, limit = 20) => {
   const token = await getAccessToken();
   const response = await fetch(
@@ -45,11 +42,9 @@ export const searchTracks = async (query, limit = 20) => {
   return await response.json();
 };
 
-// Get several tracks by IDs
 export const getTracksByIds = async (trackIds) => {
   try {
     const token = await getAccessToken();
-    // Filter out any malformed IDs and join with commas
     const validIds = trackIds.filter(id => id && id.length > 0).join(',');
     
     if (!validIds) {
@@ -75,7 +70,6 @@ export const getTracksByIds = async (trackIds) => {
   }
 };
 
-// Get artist by ID
 export const getArtistById = async (artistId) => {
   const token = await getAccessToken();
   const response = await fetch(
@@ -88,7 +82,6 @@ export const getArtistById = async (artistId) => {
   return await response.json();
 };
 
-// Get artist's top tracks
 export const getArtistTopTracks = async (artistId, market = 'US') => {
   const token = await getAccessToken();
   const response = await fetch(
@@ -101,7 +94,6 @@ export const getArtistTopTracks = async (artistId, market = 'US') => {
   return await response.json();
 };
 
-// Error handling wrapper
 export const handleSpotifyError = (response) => {
   if (!response.ok) {
     throw new Error(`Spotify API Error: ${response.status} ${response.statusText}`);

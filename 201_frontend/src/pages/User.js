@@ -11,15 +11,6 @@ import { Link, useParams } from 'react-router-dom';
 export default function User() {
     const [isFriend, setIsFriend] = useState(false)
     const {user} = useParams()
-  /*
-  const stats = [
-    { label: 'Pop', value: 83.5 },
-    { label: 'Rock', value: 76.2 },
-    { label: 'Classical', value: 65.8 },
-    { label: 'Jazz', value: 71.3 },
-    { label: 'Electronic', value: 88.5 },
-    { label: 'Hip Hop', value: 79.4 }
-  ];*/
 
   const rankings = [
     { id: 1, title: 'Last Christmas', artist: 'Wham!', rating: 4 },
@@ -44,7 +35,6 @@ export default function User() {
         <Link to="/search" className="inline-flex items-center text-gray-400 hover:text-white mb-4">
           <ArrowLeft className="mr-2" size={20} />
         </Link>
-        {/* Profile section */}
         <div className="flex items-center gap-6 pl-8 mb-12">
           <div className="w-44 h-44 rounded-full bg-gray-600 overflow-hidden">
             <img src="/images/Blank User.svg" alt="Profile" className="w-full h-full object-cover" />
@@ -75,7 +65,6 @@ export default function User() {
           </button>
           </div>
         </div>
-
         {/* Main content grid */}
         <div className="grid grid-cols-2 gap-10 ml-6">
           {/* Recent Activity */}
@@ -87,8 +76,6 @@ export default function User() {
               ))}
             </div>
           </div>
-
-          {/* Rankings */}
           <div className="bg-neutral-200/10 rounded-lg p-6 mr-6">
             <h2 className="text-3xl text-white font-bold mb-4">Rankings</h2>
             <div className="grid grid-cols-2 grid-cols-3 gap-4">

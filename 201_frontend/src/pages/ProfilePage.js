@@ -1,6 +1,5 @@
 import React from 'react';
 import Sidebar from '../components/layout/sidebar';
-import { ChevronDown } from 'lucide-react'
 import { RankedSongSm } from '../components/shared/RankedSongSm';
 import { RecentActivity } from '../components/shared/RecentActivity';
 import { useNavigate } from 'react-router-dom';
@@ -8,35 +7,6 @@ import { logout, getCurrentUser } from '../utils/auth';
 import { getTracksByIds } from '../utils/spotify';
 import { getReviewsByUser } from '../utils/reviews';
 import { useEffect, useState } from 'react';
-
-/*
-const RecentActivity = ({ song, rating, timestamp }) => (
-  <div className="flex items-start space-x-4 py-3">
-    <div className="w-12 h-12 bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
-      <img 
-        src="/api/placeholder/48/48" 
-        alt={song} 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    <div className="flex-1">
-      <div className="flex items-center justify-between">
-        <p className="text-white text-sm">Rated "{song}"</p>
-        <span className="text-gray-400 text-xs">{timestamp}</span>
-      </div>
-      <div className="flex gap-0.5 mt-1">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            className={`w-4 h-4 ${
-              i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-600'
-            }`}
-          />
-        ))}
-      </div>
-    </div>
-  </div>
-);*/
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -52,23 +22,18 @@ const ProfilePage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Get current user
         const currentUser = getCurrentUser();
         if (!currentUser) {
           navigate('/');
           return;
         }
         setUser(currentUser);
-        
-        // Get user's reviews
         const userReviews = await getReviewsByUser(currentUser.id);
         console.log('User reviews:', userReviews);
         setReviews(userReviews);
-
-        // Get song details for each review
         if (userReviews && userReviews.length > 0) {
           const songIds = userReviews.map(review => review.song_id);
-          const uniqueSongIds = [...new Set(songIds)]; // Remove duplicates
+          const uniqueSongIds = [...new Set(songIds)]; 
           console.log('Fetching songs with IDs:', uniqueSongIds);
           
           const songsData = await getTracksByIds(uniqueSongIds);
@@ -88,8 +53,6 @@ const ProfilePage = () => {
     logout();
     navigate('/');
   };
-
-  // Format the reviews for Recent Activity with error handling
   const recentActivity = reviews
     .map(review => {
       const song = songs.find(s => s && s.id === review.song_id);
@@ -102,9 +65,7 @@ const ProfilePage = () => {
       };
     })
     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-  // Format the reviews for Rankings with error handling
-  const rankings = reviews
+    const rankings = reviews
     .map(review => {
       const song = songs.find(s => s && s.id === review.song_id);
       return {
@@ -117,20 +78,18 @@ const ProfilePage = () => {
     })
     .filter((item, index, self) => 
       index === self.findIndex((t) => t.title === item.title)
-    ); // Remove duplicates
+    ); 
 
   return (
     <div className="flex min-h-screen bg-[#393939]">
       <Sidebar />
       <div className="flex-1 p-8">
-        {/* Header with logout button */}
+
         <div className="flex justify-end">
           <button onClick={handleLogout} className="px-4 py-2 bg-green-500 text-white rounded-full transition-colors">
             Logout
           </button>
         </div>
-
-        {/* Profile section */}
         <div className="flex items-center gap-6 pl-8 mb-12">
           <div className="w-44 h-44 rounded-full bg-gray-600 overflow-hidden">
             <img src="/images/Blank User.svg" alt="Profile" className="w-full h-full object-cover" />
@@ -140,11 +99,8 @@ const ProfilePage = () => {
             <h1 className="text-4xl text-white font-bold mb-2">{user.username}</h1>
             <div className="text-white/60">{reviews.length} Rankings</div>
           </div>
-        </div>
-
-        {/* Main content grid */}
+        </div> 
         <div className="grid grid-cols-2 grid-flow-col gap-10 ml-6">
-          {/* Recent Activity */}
           <div className="bg-neutral-200/10 rounded-2xl p-6">
             <h2 className="text-3xl text-white font-bold mb-4">Recent Activity</h2>
             <div className="space-y-8">
@@ -153,8 +109,6 @@ const ProfilePage = () => {
               ))}
             </div>
           </div>
-
-          {/* Rankings */}
           <div className="bg-neutral-200/10 rounded-2xl p-6 mr-6">
             <h2 className="text-3xl text-white font-bold mb-4">Rankings</h2>
             <div className="grid grid-cols-2 grid-cols-3 gap-4">

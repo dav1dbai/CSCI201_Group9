@@ -31,9 +31,9 @@ public class Database extends HttpServlet {
     private static String getUserFromID(int id) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         
-        String table = "users"; // SPECIFY TABLE
+        String table = "users"; 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(SUPABASE_URL + "/rest/v1/" + table + "?id=eq." + id)) // IMPLEMENT PARAMETER
+                .uri(URI.create(SUPABASE_URL + "/rest/v1/" + table + "?id=eq." + id)) 
                 .header("apikey", SUPABASE_API_KEY)
                 .header("Authorization", "Bearer " + SUPABASE_API_KEY)
                 .header("Content-Type", "application/json")

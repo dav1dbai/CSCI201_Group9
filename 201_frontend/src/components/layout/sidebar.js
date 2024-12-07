@@ -1,4 +1,3 @@
-// create sidebar with nav
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Star, Search, MessageCircle, User } from 'lucide-react'

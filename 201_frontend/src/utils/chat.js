@@ -16,14 +16,14 @@ export const sendMessage = (messageData, onSend, onError) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        onSend(data); // Call the onSend callback to handle the successful message sending
+        onSend(data);
       } else {
-        onError("Failed to send message"); // Call onError if sending the message failed
+        onError("Failed to send message"); 
       }
     })
     .catch((error) => {
       console.error('Error sending message:', error);
-      onError(error); // Call onError with error message if request fails
+      onError(error); 
     });
 };
 

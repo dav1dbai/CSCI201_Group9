@@ -25,7 +25,6 @@ export default function SearchPage() {
       .then(data => setAccessToken(data.access_token))
   }, [])
 
-  //search
   async function search() {
     console.log("Search for: " + searchQuery);
     var searchParameters = {
@@ -48,21 +47,6 @@ export default function SearchPage() {
     { id: 5, name: 'David' },
     { id: 6, name: 'Marco' },
   ];
-
-  /*const songs = [
-    { id: 1, title: '', artist: 'Harry Styles', image: 'bg-purple-500' },
-    { id: 2, title: 'Daydreaming', artist: 'Harry Styles', image: 'bg-red-500' },
-    { id: 3, title: 'Falling', artist: 'Harry Styles', image: 'bg-green-500' },
-    { id: 4, title: 'She', artist: 'Harry Styles', image: 'bg-cyan-500' },
-    { id: 5, title: 'Cinema', artist: 'Harry Styles', image: 'bg-amber-700' },
-    { id: 6, title: 'Boyfriends', artist: 'Harry Styles', image: 'bg-purple-500' },
-    { id: 7, title: 'Kiwi', artist: 'Harry Styles', image: 'bg-purple-500' },
-    { id: 8, title: 'Daydreaming', artist: 'Harry Styles', image: 'bg-red-500' },
-    { id: 9, title: 'Falling', artist: 'Harry Styles', image: 'bg-green-500' },
-    { id: 10, title: 'She', artist: 'Harry Styles', image: 'bg-cyan-500' },
-    { id: 11, title: 'Cinema', artist: 'Harry Styles', image: 'bg-amber-700' },
-    { id: 12, title: 'Boyfriends', artist: 'Harry Styles', image: 'bg-purple-500' },
-  ]*/
   
   return (
     <div className="flex min-h-screen bg-[#393939]">
@@ -104,9 +88,6 @@ export default function SearchPage() {
                 <Song key={i} id={track.id} title={track.name} artist={track.artists[0].name} image={track.album.images[0].url}/>
               )
             })} 
-            {/*songs.map((song) => (
-              <Song key={song.id} song={song} />
-            ))*/}
           </div>
         </section>
       </div>

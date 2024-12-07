@@ -21,10 +21,10 @@ public class ChatServlet extends HttpServlet {
         response.setHeader("Access-Control-Max-Age", "86400");
 
         try {
-            String pathInfo = request.getPathInfo(); // Changed to use pathInfo consistently
+            String pathInfo = request.getPathInfo(); 
             String result = null;
             
-            if ("/sendMessage".equals(pathInfo)) {  // Changed to use pathInfo
+            if ("/sendMessage".equals(pathInfo)) {  
             	System.out.println("send message");
                 result = sendMessage(request);
             } else {
@@ -89,8 +89,6 @@ public class ChatServlet extends HttpServlet {
         }
 
         HttpClient client = HttpClient.newHttpClient();
-
-        // Construct the message object to insert into Supabase
         String jsonBody = String.format("{\"sender\":\"%s\",\"receiver\":\"%s\",\"message\":\"%s\"}", sender, receiver, message);
 
         HttpRequest sendRequest = HttpRequest.newBuilder()
