@@ -18,10 +18,9 @@ public class Database extends HttpServlet {
         String id = request.getParameter("user_id");
         
     	try {
-            String user = getUserFromID(Integer.parseInt(id));
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(user);
+            response.getWriter().write(getUserFromID(Integer.parseInt(id))); 
         } catch (Exception e) {
         	response.getWriter().write("Error fetching data: " + e.getMessage());
         }
