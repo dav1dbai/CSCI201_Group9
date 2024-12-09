@@ -1,5 +1,10 @@
 # CSCI201 Group 9 Final Project #
 
+New instructions 12/8
+1) drag FPP_9 folder into eclipse workspace and configure necessary build paths, etc.
+2) Run server
+3) npm i, npm start react server
+
 Instructions to launch:
 1) download fpp_9.zip
 2) run the server on it and go to localhost:8080/FPP_9/
