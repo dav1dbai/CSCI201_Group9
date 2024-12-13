@@ -5,7 +5,7 @@ export function RecentActivity({ activity }) {
     <div className="flex items-center gap-4">
       <div className="w-12 h-12 rounded-md overflow-hidden">
         <img
-          src="/images/Blank Album Cover.svg"
+          src={activity.coverArt}
           alt="Activity thumbnail"
           className="w-full h-full object-cover"
         />      

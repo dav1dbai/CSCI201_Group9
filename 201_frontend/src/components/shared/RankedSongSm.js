@@ -1,11 +1,11 @@
 import { StarRating } from './StarRating'
 
-export function RankedSongSm({ title, artist, rating }) {
+export function RankedSongSm({ title, artist, rating, coverArt }) {
   return (
     <div className="bg-black/20 rounded-2xl p-3 space-y-1">
       <div className="aspect-square bg-zinc-700 rounded-lg overflow-hidden">
         <img 
-          src="/images/Blank Album Cover.svg" 
+          src={coverArt}
           alt=""
           className="w-full h-full object-cover"
         />

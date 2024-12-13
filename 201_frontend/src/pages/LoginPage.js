@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../styles/LoginPage.css';
 import { useNavigate } from 'react-router-dom'
 import { loginUser } from '../utils/auth';
+import { getCurrentUser } from '../utils/chat'
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -9,6 +10,12 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [setError] = useState('');
   const navigate = useNavigate();
+
+  // Move to home if already logged in
+  const currentUser = getCurrentUser();
+  if (currentUser != null) {
+    navigate('/home');
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();

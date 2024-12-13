@@ -18,6 +18,35 @@ const ProfilePage = () => {
   
   const [reviews, setReviews] = useState([]);
   const [songs, setSongs] = useState([]);
+  const [friends, setFriends] = useState(0);
+
+  useEffect(() => {
+    async function fetchFriendsData() {
+      const current = getCurrentUser();
+
+      let fetchedFriends = [];
+      fetch(`http://localhost:8080/FPP_9/chat/getFriends?user_id=${current.id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data.friends);
+          fetchedFriends = data.friends;
+        })
+        .catch((error) => {
+          console.error('Error loading friends:', error);
+        });
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+      console.log(fetchedFriends.length);
+      setFriends(fetchedFriends.length)
+    }
+
+    fetchFriendsData();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -61,7 +90,8 @@ const ProfilePage = () => {
         song: song ? song.name : 'Unknown Song',
         rating: review.stars,
         timestamp: new Date(review.created_at).toLocaleDateString(),
-        description: review.description
+        description: review.description,
+        coverArt: song?.album?.images?.[0]?.url || '/images/Blank Album Cover.svg'
       };
     })
     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
@@ -97,7 +127,7 @@ const ProfilePage = () => {
           <div>
             <div className="text-sm text-white/60 mb-1">Me</div>
             <h1 className="text-4xl text-white font-bold mb-2">{user.username}</h1>
-            <div className="text-white/60">{reviews.length} Rankings</div>
+            <div className="text-white/60">{reviews.length} Rankings • {friends} Friends</div>
           </div>
         </div> 
         <div className="grid grid-cols-2 grid-flow-col gap-10 ml-6">

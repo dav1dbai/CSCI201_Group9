@@ -51,7 +51,7 @@ export default function SongPage() {
     }
     
     fetchData();
-  }, []);
+  }, [showRatingModal]);
 
   const handleSubmitReview = async () => {
     console.log("submitting review");
@@ -73,7 +73,7 @@ export default function SongPage() {
       return;
     }
     setShowRatingModal(false);
-  }
+    }
 
   return (
     <div className="flex min-h-screen bg-[#393939]">

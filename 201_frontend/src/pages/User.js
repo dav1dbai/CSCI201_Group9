@@ -5,28 +5,104 @@ import { RankedSongSm } from '../components/shared/RankedSongSm';
 import { RecentActivity } from '../components/shared/RecentActivity';
 import { useState } from 'react';
 import { ArrowLeft, Plus, Check } from 'lucide-react'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
+import { getTracksByIds } from '../utils/spotify';
+import { getReviewsByUser } from '../utils/reviews';
+import { useEffect } from 'react';
 
 
 export default function User() {
+    const navigate = useNavigate();
     const [isFriend, setIsFriend] = useState(false)
+    const [reviews, setReviews] = useState([]);
+    const [songs, setSongs] = useState([]);
+    const [friends, setFriends] = useState(0);
     const {user} = useParams()
+    const location = useLocation();
+    const { id } = location.state || {};
 
-  const rankings = [
-    { id: 1, title: 'Last Christmas', artist: 'Wham!', rating: 4 },
-    { id: 2, title: 'Winter Wonderland', artist: 'Michael Bublé', rating: 5 },
-    { id: 3, title: 'Jingle Bell Rock', artist: 'Bobby Helms', rating: 3 },
-    { id: 4, title: 'Santa Baby', artist: 'Eartha Kith', rating: 4 },
-    { id: 5, title: 'White Christmas', artist: 'Artist' },
-    { id: 6, title: 'Deck the Hall', artist: 'Artist' }
-  ]
+    useEffect(() => {
+      async function fetchFriendsData() {  
+        let fetchedFriends = [];
+        fetch(`http://localhost:8080/FPP_9/chat/getFriends?user_id=${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data.friends);
+            fetchedFriends = data.friends;
+          })
+          .catch((error) => {
+            console.error('Error loading friends:', error);
+          });
+  
+        await new Promise(resolve => setTimeout(resolve, 500));
+        console.log(fetchedFriends.length);
+        setFriends(fetchedFriends.length)
+      }
+  
+      fetchFriendsData();
+    }, []);
 
-  const recentActivity = [
-    { id: 1, song: 'Last Christmas', rating: 4, timestamp: '2h ago' },
-    { id: 2, song: 'Winter Wonderland', rating: 5, timestamp: '4h ago' },
-    { id: 3, song: 'Jingle Bell Rock', rating: 3, timestamp: '1d ago' },
-    { id: 4, song: 'Santa Baby', rating: 4, timestamp: '2d ago' }
-  ];
+    useEffect(() => {
+      async function fetchData() {
+        try {
+          if (!id) {
+            navigate('/');
+            return;
+          }
+          const userReviews = await getReviewsByUser(id);
+          console.log('User reviews:', userReviews);
+          setReviews(userReviews);
+          if (userReviews && userReviews.length > 0) {
+            const songIds = userReviews.map(review => review.song_id);
+            const uniqueSongIds = [...new Set(songIds)]; 
+            console.log('Fetching songs with IDs:', uniqueSongIds);
+            
+            const songsData = await getTracksByIds(uniqueSongIds);
+            console.log('Songs data:', songsData);
+            if (songsData && songsData.tracks) {
+              setSongs(songsData.tracks);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+      fetchData();
+    }, [navigate]);
+
+  const recentActivity = reviews
+    .map(review => {
+      const song = songs.find(s => s && s.id === review.song_id);
+      return {
+        id: review.id,
+        song: song ? song.name : 'Unknown Song',
+        rating: review.stars,
+        timestamp: new Date(review.created_at).toLocaleDateString(),
+        description: review.description,
+        coverArt: song?.album?.images?.[0]?.url || '/images/Blank Album Cover.svg'
+      };
+    })
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  
+  const rankings = reviews
+    .map(review => {
+      const song = songs.find(s => s && s.id === review.song_id);
+      return {
+        id: review.id,
+        title: song ? song.name : 'Unknown Song',
+        artist: song?.artists?.[0]?.name || 'Unknown Artist',
+        rating: review.stars,
+        coverArt: song?.album?.images?.[0]?.url || '/images/Blank Album Cover.svg'
+      };
+    })
+    .filter((item, index, self) => 
+      index === self.findIndex((t) => t.title === item.title)
+    ); 
 
   return (
     <div className="flex min-h-screen bg-[#393939]">
@@ -42,7 +118,7 @@ export default function User() {
           <div>
             <div className="text-sm text-white/60 mb-1">Profile</div>
             <h1 className="text-4xl text-white font-bold mb-2">{user}</h1>
-            <div className="text-white/60">16 Rankings • 7 Friends</div>
+            <div className="text-white/60">{reviews.length} Rankings • {friends} Friends</div>
             <button 
                 onClick={() => setIsFriend(!isFriend)}
                 className={`flex items-center my-3 px-3 py-1 text-white font-medium text-sm rounded-full ${

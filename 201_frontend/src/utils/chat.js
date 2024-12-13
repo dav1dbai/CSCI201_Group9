@@ -29,8 +29,8 @@ export const sendMessage = (messageData, onSend, onError) => {
 
 export const loadMessages = (sender, recipient, onLoad, onError) => {
   console.log('Sender:', sender.id);
-  console.log('Recipient:', recipient.id);
-  fetch(`${API_BASE_URL}/loadMessages?sender=${sender.id}&receiver=${recipient.id}`, {
+  console.log('Recipient:', recipient.friend_id);
+  fetch(`${API_BASE_URL}/loadMessages?sender=${sender.id}&receiver=${recipient.friend_id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -50,5 +50,3 @@ export const loadMessages = (sender, recipient, onLoad, onError) => {
       onError(error); 
     });
 };
-
-

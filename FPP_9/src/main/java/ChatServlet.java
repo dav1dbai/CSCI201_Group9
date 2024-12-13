@@ -54,6 +54,9 @@ public class ChatServlet extends HttpServlet {
             if ("/loadMessages".equals(pathInfo)) {
             	System.out.println("load messages");
                 result = loadMessages(request);
+            } else if ("/getFriends".equals(pathInfo)) {
+            	System.out.println("get friends");
+                result = getFriends(request);
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid endpoint");
                 return;
@@ -123,7 +126,8 @@ public class ChatServlet extends HttpServlet {
         }
 
         HttpClient client = HttpClient.newHttpClient();
-
+        
+        // Getting messages you sent:
         String url = SUPABASE_URL + "/rest/v1/messages?sender=eq." + sender + "&receiver=eq." + recipient;
         
         HttpRequest loadRequest = HttpRequest.newBuilder()
@@ -133,15 +137,49 @@ public class ChatServlet extends HttpServlet {
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();
-
         HttpResponse<String> response = client.send(loadRequest, HttpResponse.BodyHandlers.ofString());
-        
         System.out.println(response.body());
 
         if (response.statusCode() == 200) {
             return "{\"success\": true, \"messages\": " + response.body() + "}";
         } else {
             throw new IOException("Error loading messages: " + response.body());
+        }
+    }
+    
+    private String getFriends(HttpServletRequest request) throws IOException, InterruptedException {
+        String user = request.getParameter("user_id");
+
+        if (user == null) {
+            throw new IOException("Missing required parameters");
+        }
+        
+        HttpClient client = HttpClient.newHttpClient();
+        
+//        String query = "SELECT f1.friend_id AS friend\n"
+//        		+ "FROM following f1\n"
+//        		+ "JOIN following f2\n"
+//        		+ "ON f1.user_id = f2.friend_id AND f1.friend_id = f2.user_id\n"
+//        		+ "WHERE f1.user_id = " + user;
+        
+        String url = SUPABASE_URL + "/rest/v1/mutual_friends?user_id=eq." + user;
+        
+        HttpRequest loadRequest = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("apikey", SUPABASE_API_KEY)
+                .header("Authorization", "Bearer " + SUPABASE_API_KEY)
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(loadRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        
+        if (response.statusCode() == 200) {
+        	System.out.println("good");
+            return "{\"success\": true, \"friends\": " + response.body() + "}";
+        } else {
+        	System.out.println("bad");
+            throw new IOException("Error loading friends: " + response.body());
         }
     }
 }
