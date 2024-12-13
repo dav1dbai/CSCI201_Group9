@@ -9,6 +9,7 @@ import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getTracksByIds } from '../utils/spotify';
 import { getReviewsByUser } from '../utils/reviews';
 import { useEffect } from 'react';
+import { getCurrentUser, addFriend, removeFriend, checkFriendStatus } from '../utils/auth';
 
 
 export default function User() {
@@ -20,30 +21,31 @@ export default function User() {
     const {user} = useParams()
     const location = useLocation();
     const { id } = location.state || {};
+    const currentUser = getCurrentUser();
 
-    useEffect(() => {
-      async function fetchFriendsData() {  
-        let fetchedFriends = [];
-        fetch(`http://localhost:8080/FPP_9/chat/getFriends?user_id=${id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
+    async function fetchFriendsData() {  
+      let fetchedFriends = [];
+      fetch(`http://localhost:8080/FPP_9/chat/getFriends?user_id=${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data.friends);
+          fetchedFriends = data.friends;
         })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data.friends);
-            fetchedFriends = data.friends;
-          })
-          .catch((error) => {
-            console.error('Error loading friends:', error);
-          });
-  
-        await new Promise(resolve => setTimeout(resolve, 500));
-        console.log(fetchedFriends.length);
-        setFriends(fetchedFriends.length)
-      }
-  
+        .catch((error) => {
+          console.error('Error loading friends:', error);
+        });
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+      console.log(fetchedFriends.length);
+      setFriends(fetchedFriends.length)
+    }
+    
+    useEffect(() => {
       fetchFriendsData();
     }, []);
 
@@ -74,6 +76,39 @@ export default function User() {
       }
       fetchData();
     }, [navigate]);
+
+    useEffect(() => {
+      async function checkFriend() {
+        if (currentUser && id && currentUser.id !== parseInt(id)) {
+          try {
+            const status = await checkFriendStatus(currentUser.id, parseInt(id));
+            setIsFriend(status);
+          } catch (error) {
+            console.error('Error checking friend status:', error);
+          }
+        }
+      }
+      checkFriend();
+    }, [currentUser, id]);
+
+    const handleFriendAction = async () => {
+      if (!currentUser) {
+        navigate('/login');
+        return;
+      }
+      try {
+        if (isFriend) {
+          await removeFriend(currentUser.id, parseInt(id));
+          setIsFriend(false);
+        } else {
+          await addFriend(currentUser.id, parseInt(id));
+          setIsFriend(true);
+        }
+        fetchFriendsData();
+      } catch (error) {
+        console.error('Error updating friend status:', error);
+      }
+    };
 
   const recentActivity = reviews
     .map(review => {
@@ -119,26 +154,28 @@ export default function User() {
             <div className="text-sm text-white/60 mb-1">Profile</div>
             <h1 className="text-4xl text-white font-bold mb-2">{user}</h1>
             <div className="text-white/60">{reviews.length} Rankings • {friends} Friends</div>
-            <button // ADD FRIEND FUNCTIONALITY
-                onClick={() => setIsFriend(!isFriend)}
+            {currentUser && currentUser.id !== parseInt(id) && (
+              <button
+                onClick={handleFriendAction}
                 className={`flex items-center my-3 px-3 py-1 text-white font-medium text-sm rounded-full ${
-                isFriend 
+                  isFriend 
                     ? 'bg-[#50C878]/90 hover:bg-[#50C878]/60' 
                     : 'outline outline-1 hover:bg-white/20 hover:outline-1'
-            } transition`}
-          >
-            {isFriend ? (
-              <>
-                <Check className="w-4 h-4 mr-3" />
-                Friends
-              </>
-            ) : (
-              <>
-                <Plus className="w-4 h-4 mr-3" />
-                Add Friend
-              </>
+                } transition`}
+              >
+                {isFriend ? (
+                  <>
+                    <Check className="w-4 h-4 mr-3" />
+                    Friends
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4 mr-3" />
+                    Add Friend
+                  </>
+                )}
+              </button>
             )}
-          </button>
           </div>
         </div>
         {/* Main content grid */}

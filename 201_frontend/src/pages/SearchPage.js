@@ -44,6 +44,9 @@ export default function SearchPage() {
 
   async function search() {
     console.log("Search for: " + searchQuery);
+    if (searchQuery === "") {
+      return;
+    }
     var searchParameters = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + accessToken}
