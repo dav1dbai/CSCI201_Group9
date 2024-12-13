@@ -107,8 +107,11 @@ public class ReviewServlet extends HttpServlet {
     private String getReviewsByUser(String userId) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         
+        String url = SUPABASE_URL + "/rest/v1/reviews?user_id=eq." + userId;
+        if (userId.equals("-1")) url = SUPABASE_URL + "/rest/v1/reviews"; // change for leaderboard???
+        
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(SUPABASE_URL + "/rest/v1/reviews?user_id=eq." + userId))
+                .uri(URI.create(url))
                 .header("apikey", SUPABASE_API_KEY)
                 .header("Authorization", "Bearer " + SUPABASE_API_KEY)
                 .GET()

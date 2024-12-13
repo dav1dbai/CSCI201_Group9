@@ -95,6 +95,7 @@ const ProfilePage = () => {
       };
     })
     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
     const rankings = reviews
     .map(review => {
       const song = songs.find(s => s && s.id === review.song_id);
@@ -134,17 +135,25 @@ const ProfilePage = () => {
           <div className="bg-neutral-200/10 rounded-2xl p-6">
             <h2 className="text-3xl text-white font-bold mb-4">Recent Activity</h2>
             <div className="space-y-8">
-              {recentActivity.map((activity) => (
-                <RecentActivity key={activity.id} activity={activity} />
-              ))}
+              {recentActivity.length > 0 ? (
+                recentActivity.map((activity) => (
+                  <RecentActivity key={activity.id} activity={activity} />
+                ))
+              ) : (
+                <p className="text-white">No reviews yet!</p>
+              )}
             </div>
           </div>
           <div className="bg-neutral-200/10 rounded-2xl p-6 mr-6">
             <h2 className="text-3xl text-white font-bold mb-4">Rankings</h2>
             <div className="grid grid-cols-2 grid-cols-3 gap-4">
-              {rankings.map((song) => (
-                <RankedSongSm key={song.id} {...song} />
-              ))}
+              {rankings.length > 0 ? (
+                rankings.map((song, index) => (
+                  <RankedSongSm key={index} {...song} />
+                ))
+              ) : (
+                <p className="text-white">No rankings yet!</p>
+              )}
             </div>
           </div>
         </div>

@@ -119,7 +119,7 @@ export default function User() {
             <div className="text-sm text-white/60 mb-1">Profile</div>
             <h1 className="text-4xl text-white font-bold mb-2">{user}</h1>
             <div className="text-white/60">{reviews.length} Rankings • {friends} Friends</div>
-            <button 
+            <button // ADD FRIEND FUNCTIONALITY
                 onClick={() => setIsFriend(!isFriend)}
                 className={`flex items-center my-3 px-3 py-1 text-white font-medium text-sm rounded-full ${
                 isFriend 
@@ -147,21 +147,29 @@ export default function User() {
           <div className="bg-neutral-200/10 rounded-lg p-6">
             <h2 className="text-3xl text-white font-bold mb-4">Recent Activity</h2>
             <div className="space-y-8">
-              {recentActivity.map((activity) => (
-                <RecentActivity key={activity.id} activity={activity} />
-              ))}
+              {recentActivity.length > 0 ? (
+                recentActivity.map((activity) => (
+                  <RecentActivity key={activity.id} activity={activity} />
+                ))
+              ) : (
+                <p className="text-white">No reviews yet!</p>
+              )}
             </div>
           </div>
           <div className="bg-neutral-200/10 rounded-lg p-6 mr-6">
             <h2 className="text-3xl text-white font-bold mb-4">Rankings</h2>
             <div className="grid grid-cols-2 grid-cols-3 gap-4">
-              {rankings.map((song, index) => (
-                <RankedSongSm key={index} {...song} />
-              ))}
+              {rankings.length > 0 ? (
+                rankings.map((song, index) => (
+                  <RankedSongSm key={index} {...song} />
+                ))
+              ) : (
+                <p className="text-white">No rankings yet!</p>
+              )}
             </div>
-            <button className="w-full mt-4 p-2 text-gray-400 hover:text-white transition-colors">
+            {/* <button className="w-full mt-4 p-2 text-gray-400 hover:text-white transition-colors">
               <ChevronDown className="w-6 h-6 mx-auto" />
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

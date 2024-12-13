@@ -4,8 +4,9 @@ import { RankedSong } from '../components/shared/RankedSong';
 import { Song } from '../components/shared/Song';
 import { searchTracks } from '../utils/spotify';
 import { useEffect, useState } from 'react';
-  const HomePage = () => {
+import { getAllReviews } from '../utils/reviews';
 
+  const HomePage = () => {
     const demoData = {
       recentSongs: [
         {title: 'Last Christmas', artist: 'Wham!', rating: 4 },
@@ -13,20 +14,14 @@ import { useEffect, useState } from 'react';
         {title: 'Jingle Bell Rock', artist: 'Bobby Helms', rating: 3 },
         {title: 'Santa Baby', artist: 'Eartha Kith', rating: 4 }
       ],
-      recs: [
-        { id: 1, title: 'Last Christmas', artist: 'Wham!' },
-        { id: 2, title: 'Winter Wonderland', artist: 'Michael Bublé' },
-        { id: 3, title: 'Jingle Bell Rock', artist: 'Bobby Helms' },
-        { id: 4, title: 'White Christmas', artist: 'Artist' },
-        { id: 5, title: 'Deck the Hall', artist: 'Artist' },
-        { id: 6, title: 'Santa Baby', artist: 'Eartha Kith' }
-      ]
     };
 
-    const [data, setData] = useState([]);
+    const [rec, setRec] = useState([]);
+    const [top, setTop] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
+            // recs
             const songs = await searchTracks('Christmas', 6);
             console.log("songs", songs);
             const songData = songs.tracks.items.map(item => ({
@@ -35,7 +30,12 @@ import { useEffect, useState } from 'react';
               artist: item.artists[0].name,
               image: item.album.images[0].url
             }));
-            setData(songData);
+            setRec(songData);
+
+            // leaderboard
+            const top = await getAllReviews();
+            console.log("top", top);
+            // DO THIS FOR LEADERBOARD
         }
         fetchData();
     }, []);
@@ -57,7 +57,7 @@ import { useEffect, useState } from 'react';
           <section className="space-y-6">
             <h2 className="text-2xl font-bold text-white mx-4">Recommended Songs</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mx-4">
-              {data.map((song, i) => (
+              {rec.map((song, i) => (
               <Song key={i} id={song.id} title={song.title} artist={song.artist} image={song.image}/>
               ))}
             </div>

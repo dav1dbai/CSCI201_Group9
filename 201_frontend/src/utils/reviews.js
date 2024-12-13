@@ -16,6 +16,11 @@ export const submitReview = async (userId, songId, stars, description) => {
   return response;
 };
 
+export const getAllReviews = async () => {
+  const response = await fetch(`${API_BASE_URL}/review/user?user_id=-1`);
+  return Promise.resolve(response.json());
+}
+
 export const getReviewsByUser = async (userId) => {
   const response = await fetch(`${API_BASE_URL}/review/user?user_id=${userId}`);
   return response.json();

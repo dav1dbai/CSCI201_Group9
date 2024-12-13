@@ -9,7 +9,7 @@ export function RecentActivity({ activity }) {
           alt="Activity thumbnail"
           className="w-full h-full object-cover"
         />      
-        </div>
+      </div>
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <div>
@@ -17,6 +17,11 @@ export function RecentActivity({ activity }) {
             <StarRating rating={activity.rating} />
           </div>
           <div className="text-sm text-white/60">{activity.timestamp}</div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-sm text-white/90 mt-1">{activity.description}</div>
+          </div>
         </div>
       </div>
     </div>

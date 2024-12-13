@@ -127,8 +127,9 @@ public class ChatServlet extends HttpServlet {
 
         HttpClient client = HttpClient.newHttpClient();
         
-        // Getting messages you sent:
-        String url = SUPABASE_URL + "/rest/v1/messages?sender=eq." + sender + "&receiver=eq." + recipient;
+        String url = SUPABASE_URL + "/rest/v1/messages?" +
+        		  "or=(and(sender.eq." + sender + ",receiver.eq." + recipient + ")," +
+        		  "and(sender.eq." + recipient + ",receiver.eq." + sender + "))";
         
         HttpRequest loadRequest = HttpRequest.newBuilder()
                 .uri(URI.create(url))
