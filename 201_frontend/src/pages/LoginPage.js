@@ -75,7 +75,7 @@ const LoginPage = () => {
             </form>
 
             <div className="login-signup-link">
-              Don't have an account? <a href="/signup">Sign up</a>
+              Don't have an account? <a href="/signup">Sign up</a> or <a href="/home">continue as guest</a>
             </div>
 
         </div>

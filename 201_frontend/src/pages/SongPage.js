@@ -31,7 +31,11 @@ export default function SongPage() {
           previewUrl: song.preview_url,
         });
 
-        setUserId(getCurrentUser().id);
+
+        const currentUser = getCurrentUser();
+        if (currentUser) {
+          setUserId(currentUser.id);
+        }
 
         const [reviewsData, usersData] = await Promise.all([
           getReviewsByTrack(song.id),
@@ -101,12 +105,14 @@ export default function SongPage() {
           >
             <Play strokeWidth={1} fill="#393939" className="w-6 h-12 rounded-full" />
           </button>
-          <button
-            onClick={() => setShowRatingModal(true)}
-            className="px-4 py-2 text-white outline outline-1 font-medium text-sm  rounded-full hover:bg-white/20 transition"
+          {userId && (
+            <button
+              onClick={() => setShowRatingModal(true)}
+              className="px-4 py-2 text-white outline outline-1 font-medium text-sm  rounded-full hover:bg-white/20 transition"
           >
             Rank this song
           </button>
+          )}
         </div>
         <div className="flex w-screen items-center mb-4 border-b border-white/40">
           <div className="w-screen grid grid-cols-12 gap-16 mb-2 ml-16 mr-64 text-sm font-medium text-white/70">
@@ -134,6 +140,7 @@ export default function SongPage() {
         ) : (
           <div className="ml-2 text-white/60 text-lg text-center">No ratings yet!</div>
         )}
+        
 
         {showRatingModal && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center">

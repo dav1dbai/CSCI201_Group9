@@ -57,7 +57,7 @@ const RegisterPage = () => {
         </div>
         <div className="register-form-container">
           <h2>Create an account</h2>
-          <p className="info-text">*Potentially add some information here*</p>
+          <p className="info-text"></p>
 
           <form onSubmit={handleSubmit}>
             

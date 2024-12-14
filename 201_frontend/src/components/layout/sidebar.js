@@ -1,9 +1,16 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Star, Search, MessageCircle, User } from 'lucide-react'
-
+import { getCurrentUser } from '../../utils/auth';
+import { useEffect, useState } from 'react';
 
 function Sidebar() {
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        const user = getCurrentUser();
+        setCurrentUser(user);
+    }, []);
 
     return (
 
@@ -39,27 +46,44 @@ function Sidebar() {
                     <span>Search</span>
                 </NavLink>
 
-                <NavLink
-                    to="/messages"
-                    className={({ isActive }) => `
+                {currentUser && (
+                    <NavLink
+                        to="/messages"
+                        className={({ isActive }) => `
                     flex items-center gap-3 rounded-full px-4 py-3 text-black font-medium no-underline transition-colors
                     ${isActive ? 'bg-[#BAECCA]' : 'hover:bg-[#BAECCA]'}
                     `}
                 >
-                    <MessageCircle className="h-5 w-5" />
-                    <span>Messages</span>
-                </NavLink>
+                        <MessageCircle className="h-5 w-5" />
+                        <span>Messages</span>
+                    </NavLink>
+                )}
 
-                <NavLink
-                    to="/profile"
-                    className={({ isActive }) => `
-            flex items-center gap-3 rounded-full px-4 py-3 text-black font-medium no-underline transition-colors
-            ${isActive ? 'bg-[#BAECCA]' : 'hover:bg-[#86efac]'}
-          `}
+                
+                {currentUser && (
+                    <NavLink
+                        to="/profile"
+                        className={({ isActive }) => `
+                        flex items-center gap-3 rounded-full px-4 py-3 text-black font-medium no-underline transition-colors
+                        ${isActive ? 'bg-[#BAECCA]' : 'hover:bg-[#86efac]'}
+                    `}
                 >
                     <User className="h-5 w-5" />
-                    <span>Profile</span>
-                </NavLink>
+                        <span>Profile</span>
+                    </NavLink>
+                )}
+                {!currentUser && (
+                    <NavLink
+                        to="/signup"
+                        className={({ isActive }) => `
+                        flex items-center gap-3 rounded-full px-4 py-3 text-black font-medium no-underline transition-colors
+                        ${isActive ? 'bg-[#BAECCA]' : 'hover:bg-[#BAECCA]'}
+                        `}
+                    >
+                        <User className="h-5 w-5" />
+                        <span>Sign Up</span>
+                    </NavLink>
+                )}
             </div>
 
             <div class="flex justify-center items-center pb-3">

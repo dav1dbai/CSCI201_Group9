@@ -19,8 +19,13 @@ export default function SearchPage() {
 
   useEffect(() => {
     async function fetchUsers() {
-      let current = getCurrentUser();
+      let current = await getCurrentUser();
       setCurrentUser(current);
+
+      if (!current) {
+        console.log('No current user');
+        return;
+      }
 
       let fetchedUsers = await getAllUsers();
       console.log(fetchedUsers);

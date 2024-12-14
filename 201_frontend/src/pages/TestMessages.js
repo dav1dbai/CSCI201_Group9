@@ -52,7 +52,13 @@ const MessagesPage = () => {
 
   useEffect(() => {
     if (selectedFriend && currentUser) {
+      const interval = setInterval(() => {
+        fetchMessages(currentUser, selectedFriend);
+      }, 1000);
+
       fetchMessages(currentUser, selectedFriend);
+
+      return () => clearInterval(interval);
     }
   }, [selectedFriend, currentUser]);
 
